@@ -49,7 +49,7 @@ override either:
 
 | App | What it is | Blog post |
 |-----|-----------|-----------|
-| `homepage` | gethomepage.dev — the dashboard in front of my whole homelab | *link to spotlight post* |
+| `homepage` | gethomepage.dev — the dashboard in front of my whole homelab | https://staketechlab.com/homepage-the-dashboard-in-front-of-my-whole-homelab-with-a-one-line-installer/ |
 
 More apps land weekly — the catalog is the point.
 
