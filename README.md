@@ -14,12 +14,12 @@ run it.
 
 ```bash
 # Clone and install, or fetch just the installer:
-git clone https://github.com/<your-user>/staketechlab-containers.git
+git clone https://github.com/staketechlab/staketechlab-containers.git
 cd staketechlab-containers
 ./install.sh homepage
 
 # One-liner (no clone):
-bash <(curl -fsSL https://raw.githubusercontent.com/<your-user>/staketechlab-containers/main/install.sh) homepage
+bash <(curl -fsSL https://raw.githubusercontent.com/staketechlab/staketechlab-containers/main/install.sh) homepage
 ```
 
 The installer picks a sensible default (`~/docker/<app>`, port `3000`) —
