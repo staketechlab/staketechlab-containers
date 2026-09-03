@@ -1,0 +1,19 @@
+# https://gethomepage.dev/latest/configs/settings
+# Starter settings — tweak to taste. Full docs at the URL above.
+
+title: My Homelab
+theme: dark
+color: emerald
+
+# Background: drop an image in config/background/ and reference it here,
+# or leave blank for the default gradient.
+background:
+  image:
+  blur: sm
+  saturate: 50
+  brightness: 50
+  opacity: 50
+
+# Full-width layout, up to 4 cards per group row.
+fullWidth: true
+maxGroupColumns: 4

@@ -1,0 +1,3 @@
+# never commit real env files (installer-generated .env holds host config)
+.env
+*.log

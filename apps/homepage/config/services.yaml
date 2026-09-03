@@ -1,0 +1,47 @@
+# Your services — this is the file that makes Homepage YOURS.
+# Docs: https://gethomepage.dev/configs/services
+#
+# Groups are top-level "Name:" keys; services are listed under them.
+# A service with no widget is a plain link card. Uncomment and edit.
+
+- My Services:
+
+  # A plain link card (no widget) — the simplest entry:
+  # - Router:
+  #     href: http://192.168.1.1
+  #     description: Network gateway
+  #     icon: mdi-router-network
+
+  # Live widget examples — each needs its app running & reachable.
+  # Docs for every widget type: https://gethomepage.dev/widgets
+
+  # - Home Assistant:
+  #     href: http://192.168.1.10:8123
+  #     description: Home automation
+  #     widget:
+  #       type: homeassistant
+  #       url: http://192.168.1.10:8123
+  #       key: LONG_LIVED_ACCESS_TOKEN
+
+  # - Pi-hole / AdGuard:
+  #     widget:
+  #       type: adguard
+  #       url: http://192.168.1.10:3000
+  #       username: admin
+  #       password: yourpassword
+
+  # - Anything with a JSON API, rendered as a stat:
+  #     widget:
+  #       type: customapi
+  #       url: http://192.168.1.10:8080/api/status
+  #       refreshInterval: 60000
+  #       headers:
+  #         Authorization: Bearer YOUR_TOKEN
+  #       mappings:
+  #         - field: version
+  #           label: Version
+
+  # Keep keys out of this file with env vars — Homepage substitutes
+  # {{HOMEPAGE_VAR_NAME}} from the container environment. Define them in the
+  # .env file next to docker-compose.yml and reference like:
+  #       key: {{HOMEPAGE_VAR_HASS_TOKEN}}

@@ -1,0 +1,28 @@
+# Homepage (gethomepage.dev) — Docker Compose
+# Docs: https://gethomepage.dev/
+#
+# - HOMEPAGE_PORT comes from the .env next to this file (default 3000).
+# - The docker socket mount is read-only and only used for host stats
+#   (resources widget) / container discovery. Remove it if you don't want it.
+# - Config lives in ./config — edit services.yaml, widgets.yaml,
+#   settings.yaml there and the UI picks it up on reload.
+
+services:
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    # container_name: homepage   # uncomment if you want a fixed name
+    restart: unless-stopped
+    # .env lives next to this file (the installer creates it from
+    # .env.example — or: cp .env.example .env). It sets the port AND is
+    # passed to the container (HOMEPAGE_ALLOWED_HOSTS, HOMEPAGE_VAR_*).
+    env_file:
+      - .env
+    ports:
+      - "${HOMEPAGE_PORT:-3000}:3000"
+    volumes:
+      - ./config:/app/config
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /etc/localtime:/etc/localtime:ro
+    # If you expose this to the internet, put it behind a reverse proxy
+    # with SSO (Authentik / Authelia / ...) in front — it has no built-in
+    # login and will happily show your whole homelab to anyone.

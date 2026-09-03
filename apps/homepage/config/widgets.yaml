@@ -1,0 +1,22 @@
+# Info widgets shown in the header area.
+# Docs: https://gethomepage.dev/configs/info-widgets/
+
+- resources:
+    cpu: true
+    memory: true
+    disk: /
+
+- datetime:
+    text_size: xl
+    format:
+      timeStyle: short
+
+# Weather for YOUR location — uncomment, set lat/lon, and it appears.
+# Get coordinates from https://open-meteo.com/ or just search "<town> lat lon".
+# - openmeteo:
+#     label: Home
+#     latitude: 40.90
+#     longitude: -79.90
+#     timezone: America/New_York
+#     units: imperial
+#     cache: 5
