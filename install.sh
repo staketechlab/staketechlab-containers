@@ -65,9 +65,17 @@ if ! command -v docker >/dev/null 2>&1; then
     exit 1
 fi
 
-if ! docker compose version >/dev/null 2>&1; then
-    echo "ERROR: the docker compose plugin is missing." >&2
-    echo "Install it: https://docs.docker.com/compose/install/" >&2
+# Compose command: prefer the v2 plugin (docker compose), fall back to the
+# standalone binary (docker-compose) still common on distro-packaged docker.
+COMPOSE=""
+if docker compose version >/dev/null 2>&1; then
+    COMPOSE="docker compose"
+elif command -v docker-compose >/dev/null 2>&1; then
+    COMPOSE="docker-compose"
+    echo "NOTE: docker compose plugin not found — using standalone docker-compose."
+else
+    echo "ERROR: neither the docker compose plugin nor docker-compose was found." >&2
+    echo "Install the plugin: https://docs.docker.com/compose/install/" >&2
     exit 1
 fi
 
@@ -116,8 +124,8 @@ else
     echo "    config/ not empty — keeping your existing config."
 fi
 
-echo "==> Starting with docker compose"
-(cd "$INSTALL_DIR" && docker compose up -d)
+echo "==> Starting with $COMPOSE"
+(cd "$INSTALL_DIR" && $COMPOSE up -d)
 
 # --- wait for HTTP ----------------------------------------------------------
 echo "==> Waiting for $APP to answer on port $PORT..."
@@ -128,7 +136,7 @@ for i in $(seq 1 30); do
     sleep 1
     if [[ "$i" == 30 ]]; then
         echo "WARNING: container started but did not answer HTTP on port $PORT yet." >&2
-        echo "Check: docker compose -f $INSTALL_DIR/docker-compose.yml logs" >&2
+        echo "Check: cd $INSTALL_DIR && $COMPOSE logs" >&2
     fi
 done
 
@@ -142,9 +150,9 @@ cat <<EOF
   On your LAN: http://${IP:-<this-host>}:$PORT
 
 Manage it:
-  Update:     cd $INSTALL_DIR && docker compose pull && docker compose up -d
-  Logs:       cd $INSTALL_DIR && docker compose logs -f
-  Stop/start: cd $INSTALL_DIR && docker compose stop && docker compose start
+  Update:     cd $INSTALL_DIR && $COMPOSE pull && $COMPOSE up -d
+  Logs:       cd $INSTALL_DIR && $COMPOSE logs -f
+  Stop/start: cd $INSTALL_DIR && $COMPOSE stop && $COMPOSE start
 
 Next steps:
   1. Open http://localhost:$PORT and check the starter dashboard.
