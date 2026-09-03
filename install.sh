@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 #
 # StakeTechLab container installer — https://staketechlab.com
+# Repo: https://github.com/staketechlab/staketechlab-containers
 #
 # Usage:
-#   ./install.sh <app> [install-dir] [port]
+#   ./install.sh <app> [install-dir] [port]     # from a clone
+#   bash <(curl -fsSL https://raw.githubusercontent.com/staketechlab/staketechlab-containers/main/install.sh) homepage
 #
 # Examples:
 #   ./install.sh homepage
@@ -25,12 +27,30 @@ if [[ -z "$APP" ]]; then
     exit 1
 fi
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-APP_DIR="$SCRIPT_DIR/apps/$APP"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" 2>/dev/null && pwd)"
 
-if [[ ! -d "$APP_DIR" ]]; then
+# --- app payload resolution ------------------------------------------------
+# Local (git clone): apps/ lives next to install.sh. Remote (bash <(curl)):
+# the script is a stream with no apps/ beside it, so fetch the payload
+# from the repo tarball into a temp dir (cleaned up on exit).
+REPO="staketechlab/staketechlab-containers"
+TMP_DIR=""
+if [[ -d "$SCRIPT_DIR/apps/$APP" ]]; then
+    APP_DIR="$SCRIPT_DIR/apps/$APP"
+elif command -v curl >/dev/null 2>&1 && command -v tar >/dev/null 2>&1; then
+    TMP_DIR="$(mktemp -d)"
+    trap 'rm -rf "$TMP_DIR"' EXIT
+    echo "==> Fetching $APP installer payload from GitHub..."
+    if ! curl -fsSL "https://codeload.github.com/$REPO/tar.gz/refs/heads/main" 2>/dev/null | tar -xz -C "$TMP_DIR"; then
+        echo "ERROR: could not fetch the app payload from $REPO." >&2
+        exit 1
+    fi
+    APP_DIR="$(echo "$TMP_DIR"/*/apps/"$APP" 2>/dev/null || true)"
+fi
+
+if [[ ! -d "${APP_DIR:-}" ]]; then
     echo "Unknown app '$APP'. Available apps:" >&2
-    ls "$SCRIPT_DIR/apps" >&2
+    ls "$SCRIPT_DIR/apps" 2>/dev/null || true
     exit 1
 fi
 
