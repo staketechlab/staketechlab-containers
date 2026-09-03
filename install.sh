@@ -60,8 +60,15 @@ PORT="${3:-3000}"
 
 # --- checks -----------------------------------------------------------------
 if ! command -v docker >/dev/null 2>&1; then
-    echo "ERROR: docker is not installed (or not on PATH)." >&2
-    echo "Install it first: https://docs.docker.com/engine/install/" >&2
+    echo "ERROR: Docker is not installed (or not on PATH)." >&2
+    echo >&2
+    echo "This installer runs containers, so you need Docker Engine first." >&2
+    echo "On Ubuntu / Debian, the official route (Engine + Compose + group):" >&2
+    echo >&2
+    echo '  curl -fsSL https://get.docker.com | sh' >&2
+    echo '  sudo usermod -aG docker $USER   # then log out and back in' >&2
+    echo >&2
+    echo "Other distros: https://docs.docker.com/engine/install/" >&2
     exit 1
 fi
 
@@ -70,12 +77,19 @@ fi
 COMPOSE=""
 if docker compose version >/dev/null 2>&1; then
     COMPOSE="docker compose"
-elif command -v docker-compose >/dev/null 2>&1; then
+elif command -v docker-compose >/dev/null 2>&1 && docker-compose version >/dev/null 2>&1; then
     COMPOSE="docker-compose"
     echo "NOTE: docker compose plugin not found — using standalone docker-compose."
 else
-    echo "ERROR: neither the docker compose plugin nor docker-compose was found." >&2
-    echo "Install the plugin: https://docs.docker.com/compose/install/" >&2
+    echo "ERROR: Docker Compose is missing (neither the 'docker compose' plugin" >&2
+    echo "nor the standalone 'docker-compose' binary was found)." >&2
+    echo >&2
+    echo "The installer needs Compose to start the stack. On Ubuntu / Debian:" >&2
+    echo >&2
+    echo '  sudo apt install docker-compose-v2            # adds the plugin' >&2
+    echo '  # or, if Docker itself is missing too: curl -fsSL https://get.docker.com | sh' >&2
+    echo >&2
+    echo "Other distros: https://docs.docker.com/compose/install/" >&2
     exit 1
 fi
 

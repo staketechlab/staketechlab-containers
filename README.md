@@ -10,6 +10,22 @@ gotchas, and what I changed from the default setup.
 Everything here is MIT-licensed and readable — read the script before you
 run it.
 
+## Requirements
+
+- A Linux box — any distro Docker supports (the commands below are Ubuntu / Debian flavored)
+- **Docker Engine** installed
+- **Docker Compose** — the v2 plugin (`docker compose`) or the standalone binary (`docker-compose`) both work; the installer detects either
+- Your user in the `docker` group, so no `sudo` is needed to run containers
+- No root required for the installer itself
+
+**First time with Docker?** On Ubuntu / Debian this installs Engine + the Compose plugin:
+
+```bash
+curl -fsSL https://get.docker.com | sh
+sudo usermod -aG docker $USER   # then log out and back in
+docker --version && docker compose version   # sanity check
+```
+
 ## Quick start
 
 ```bash
